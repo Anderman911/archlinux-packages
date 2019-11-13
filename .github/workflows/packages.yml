@@ -9,17 +9,7 @@ on:
 env:
   IMAGE_NAME: archlinux-packages
 jobs:
-  get-image:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Login to GPR
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-      - name: Pull image
-        run: |
-          docker pull docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest
   build:
-    needs: get-image
     runs-on: ubuntu-latest
     env:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
@@ -27,8 +17,5 @@ jobs:
       - uses: actions/checkout@v1
       - name: Build packages
         run: |
-          sudo cp -R /github/workspace /home/builder/
-          /home/builder/script/build-packages.sh
-    container:
-      image: archlinux-packages:latest
-      options: "-e GCLOUD_CREDENTIALS"
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          docker run -e GCLOUD_CREDENTIALS -v /github/workspace:/home/builder docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest /home/builder/script/build-packages.sh
