@@ -9,13 +9,10 @@ gcloud auth activate-service-account --key-file /tmp/gcloud.json
 gsutil -m rsync -d -r gs://archlinux-packages /repo
 
 listrepo
-listrepo | aur vercmp
-listrepo | aur vercmp -q
-
-listrepo | aur vercmp -q | xargs aur sync --noconfirm
+listrepo | aur vercmp -q | xargs aur sync --noconfirm -d ahayworth -r /repo
 while read pkg; do
   if ! listrepo | grep -q "$pkg"; then
-    aur sync --noconfirm $pkg
+    aur sync --noconfirm -d ahayworth -r /repo $pkg
   fi
 done < /home/builder/repo/packages
 
