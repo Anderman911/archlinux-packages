@@ -18,4 +18,13 @@ jobs:
       - name: Build packages
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          docker run -e GCLOUD_CREDENTIALS -v $GITHUB_WORKSPACE:/home/builder/repo docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest /home/builder/repo/script/build-packages.sh
+          docker run \
+            --privileged \
+            --tmpfs /run \
+            --tmpfs /tmp \
+            -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
+            -v /etc/machine-id:/etc/machine-id:ro \
+            -e GCLOUD_CREDENTIALS \
+            -v $GITHUB_WORKSPACE:/home/builder/repo \
+            docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest \
+            /home/builder/repo/script/build-packages.sh
