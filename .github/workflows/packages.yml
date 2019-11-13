@@ -9,15 +9,19 @@ on:
 env:
   IMAGE_NAME: archlinux-packages
 jobs:
+  login:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Login to GPR
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
   build:
+    needs: login
     runs-on: ubuntu-latest
     env:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v1
-      - name: Login to GPR
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
       - name: Build packages
         run: |
           sudo cp -R /github/workspace /home/builder/
