@@ -6,7 +6,7 @@ function listrepo() {
 
 echo $GCLOUD_CREDENTIALS | base64 -d > /tmp/gcloud.json
 gcloud auth activate-service-account --key-file /tmp/gcloud.json
-gsutil rsync gs://archlinux-packages /repo
+gsutil -m rsync -d -r gs://archlinux-packages /repo
 
 listrepo
 
