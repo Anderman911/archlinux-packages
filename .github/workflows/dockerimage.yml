@@ -9,17 +9,8 @@ on:
 env:
   IMAGE_NAME: archlinux-packages
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
-      - name: Run tests
-        run: |
-          docker build . --file Dockerfile
-  push:
-    needs: test
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v1
       - name: Build image
