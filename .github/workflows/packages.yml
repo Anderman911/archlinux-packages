@@ -17,6 +17,6 @@ jobs:
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
           docker pull docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest
-          docker run docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest /home/builder/script/build-packages.sh
+          docker run -e GCLOUD_CREDENTIALS docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest /home/builder/script/build-packages.sh
         env:
           GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
