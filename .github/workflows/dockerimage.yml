@@ -1,8 +1,8 @@
 name: Build packages container
 on:
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
   schedule:
     - cron: "0 * * * *"
 
