@@ -1,19 +1,23 @@
 #!/bin/bash
 
+function listrepo() {
+  aur repo -d ahayworth -r /tmp -l
+}
+
 echo $GCLOUD_CREDENTIALS | base64 -d > /tmp/gcloud.json
 gcloud auth activate-service-account --key-file /tmp/gcloud.json
+gsutil rsync gs://archlinux-packages /repo
 
-gsutil cp gs://archlinux-packages/ahayworth.db /tmp/
-aur repo -d ahayworth -r /tmp -l \
-  | aur vercmp \
-  | xargs aur sync --noconfirm
+listrepo
 
-pkglist=$(aur repo -d ahayworth -r /tmp -l)
+listrepo | aur vercmp | xargs aur sync --noconfirm
 while read pkg; do
-  if ! echo $pkglist | grep -q "$pkg"; then
+  if ! listrepo | grep -q "$pkg"; then
     aur sync --noconfirm $pkg
   fi
 done < packages
 
 ls -al
 ls -al /tmp
+
+listrepo
