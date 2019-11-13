@@ -9,9 +9,9 @@ RUN pacman -Syu --noconfirm \
 
 RUN useradd -m builder \
   && echo 'builder ALL=(ALL) NOPASSWD: ALL' >> /etc/sudoers
-WORKDIR /repo
-RUN chown builder:builder /repo
+RUN mkdir /repo && chown builder:builder /repo
 USER builder
+WORKDIR /home/builder
 
 RUN gpg --recv-keys DBE7D3DD8C81D58D0A13D0E76BC26A17B9B7018A
 
