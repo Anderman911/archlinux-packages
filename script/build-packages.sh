@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function listrepo() {
-  aur repo -d ahayworth -r /tmp -l
+  aur repo -d ahayworth -r /repo -l
 }
 
 echo $GCLOUD_CREDENTIALS | base64 -d > /tmp/gcloud.json
@@ -18,6 +18,7 @@ while read pkg; do
 done < packages
 
 ls -al
+ls -al /repo
 ls -al /tmp
 
 listrepo
