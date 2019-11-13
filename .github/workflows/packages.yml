@@ -11,6 +11,8 @@ env:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
     steps:
       - uses: actions/checkout@v1
       - name: Build packages
@@ -19,6 +21,4 @@ jobs:
           /home/builder/script/build-packages.sh
     container:
       image: docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest
-      env:
-        GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
-
+      options: "-e GCLOUD_CREDENTIALS"
