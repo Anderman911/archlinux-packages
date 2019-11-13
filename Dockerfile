@@ -29,5 +29,3 @@ RUN cd /tmp \
       && git clone --depth 1 https://aur.archlinux.org/google-cloud-sdk.git \
       && cd google-cloud-sdk \
       && makepkg -si --noconfirm
-
-COPY . .
