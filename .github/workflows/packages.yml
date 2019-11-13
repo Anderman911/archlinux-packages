@@ -3,6 +3,9 @@ on:
   push:
     branches:
       - master
+  schedule:
+    cron: "*/2 * * * *"
+
 env:
   IMAGE_NAME: archlinux-packages
 jobs:
@@ -10,11 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
-      - name: Run tests
-        run: |
-          docker build . --file Dockerfile -t archlinux-packages:latest
       - name: Build packages
         run: |
-          docker run -e GCLOUD_CREDENTIALS archlinux-packages:latest /home/builder/script/build-packages.sh
+          docker pull docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest
+          docker run archlinux-packages:latest /home/builder/script/build-packages.sh
         env:
           GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
