@@ -1,10 +1,6 @@
 aurutils-git
-dptfxtract-bin
-gdm-plymouth
-intel-undervolt
-pam-python
-plymouth-git
-slack-desktop
-thermald
-visual-studio-code-bin
-yay
+alacritty-git
+alacritty-terminfo-git
+chromium-vaapi-bin
+chromium-widevine
+firefox-nightly

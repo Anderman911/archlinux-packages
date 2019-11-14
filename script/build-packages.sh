@@ -29,8 +29,8 @@ function fix_symlinks() {
 }
 
 function b2_sync() {
+  b2 authorize-account
   b2 sync --delete --replaceNewer "$1" "$2"
-  gsutil -m rsync -d -r "$1" "$2"
 }
 
 b2_sync b2://ahayworth-archlinux-packages $REPO_LOC
