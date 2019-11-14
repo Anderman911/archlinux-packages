@@ -30,8 +30,11 @@ RUN cd /tmp \
       && cd google-cloud-sdk \
       && makepkg -si --noconfirm
 
-RUN sudo /bin/bash -c "echo -e '[ahayworth]\nSigLevel = Optional TrustAll\nServer = file:///repo' >> /etc/pacman.conf"
+COPY pacman.conf.repo /tmp
+RUN cat /etc/pacman.conf /tmp/pacman.conf.repo > /tmp/pacman.conf
+RUN sudo mv /tmp/pacman.conf /etc/pacman.conf
 RUN repo-add /repo/ahayworth.db.tar
-RUN sudo pacman -Syu
+RUN sudo pacman -Syu --noconfirm
+
 RUN sudo ln -sf /usr/sbin/archbuild /usr/local/bin/aur-x86_64-build
 RUN sudo cp /etc/pacman.conf /usr/share/devtools/pacman-aur.conf

@@ -1,0 +1,3 @@
+[ahayworth]
+SigLevel = Optional TrustAll
+Server = file:///repo

@@ -38,9 +38,9 @@ function gcloud_sync() {
 }
 
 gcloud_login
-
 gcloud_sync gs://archlinux-packages $REPO_LOC
 fix_symlinks
+sudo sed -i -e 's/makechrootpkg_args=(\-c \-n \-C)/makechrootpkg_args=(-c)/g' /usr/sbin/archbuild
 
 listrepo | aur vercmp -q > /tmp/needs_update
 while read pkg; do
@@ -53,10 +53,10 @@ while read pkg; do
     echo "Adding $pkg..."
     buildpkg $pkg
   fi
-done < /home/builder/repo/packages
+done < /home/builder/archlinux-packages/packages
 
 while read pkg ver; do
-  if ! grep -q "$pkg" /home/builder/repo/packages; then
+  if ! grep -q "$pkg" /home/builder/archlinux-packages/packages; then
     echo "Removing $pkg..."
     repo-remove $REPO_LOC/$REPO_NAME.db.tar $pkg
     rm -f $REPO_LOC/$pkg*.pkg.tar.*
