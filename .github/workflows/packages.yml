@@ -25,6 +25,6 @@ jobs:
             -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
             -v /etc/machine-id:/etc/machine-id:ro \
             -e GCLOUD_CREDENTIALS \
-            -v $GITHUB_WORKSPACE:/home/builder/repo \
+            -v $GITHUB_WORKSPACE:/home/builder/archlinux-packages \
             docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest \
-            /home/builder/repo/script/build-packages.sh
+            /home/builder/archlinux-packages/script/build-packages.sh
