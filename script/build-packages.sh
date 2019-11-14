@@ -3,6 +3,19 @@
 REPO_NAME='ahayworth'
 REPO_LOC='/repo'
 
+function makechroot() {
+  sudo mkarchroot \
+    -C /usr/share/devtools/pacman-aur.conf \
+    /var/lib/archbuild/aur-x86_64/root
+  sudo arch-nspawn /var/lib/archbuild/aur-x86_64/root \
+    pacman -S --noconfirm git
+
+  while read key; do
+    sudo arch-nspawn /var/lib/archbuild/aur-x86_64/root \
+      pacman --recv-keys $key
+  done < /home/builder/archlinux-packages/keys
+}
+
 function buildpkg() {
   aur sync \
     --upgrades \
@@ -35,6 +48,7 @@ function b2_sync() {
 
 b2_sync b2://ahayworth-archlinux-packages $REPO_LOC
 fix_symlinks
+makechroot
 sudo sed -i -e 's/makechrootpkg_args=(\-c \-n \-C)/makechrootpkg_args=(-c)/g' /usr/sbin/archbuild
 
 listrepo | aur vercmp -q > /tmp/needs_update
