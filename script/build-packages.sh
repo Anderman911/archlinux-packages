@@ -2,15 +2,16 @@
 
 REPO_NAME='ahayworth'
 REPO_LOC='/repo'
+CHROOT_BASE='/var/lib/archbuild/aur-x86_64'
+CHROOT="${CHROOT_BASE}/root"
+CHROOT_PACMAN_CONF="/usr/share/devtools/pacman-aur.conf"
 
 function makechroot() {
-  sudo mkarchroot \
-    -C /usr/share/devtools/pacman-aur.conf \
-    /var/lib/archbuild/aur-x86_64/root base-devel git
+  sudo mkdir -p $CHROOT_BASE
+  sudo mkarchroot -C $CHROOT_PACMAN_CONF $CHROOT base-devel git
 
   while read key; do
-    sudo arch-nspawn /var/lib/archbuild/aur-x86_64/root \
-      pacman --recv-keys $key
+    sudo arch-nspawn $CHROOT pacman-key --recv-keys $key
   done < /home/builder/archlinux-packages/keys
 }
 
