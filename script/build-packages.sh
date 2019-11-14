@@ -28,17 +28,12 @@ function fix_symlinks() {
   done
 }
 
-function gcloud_login() {
-  echo $GCLOUD_CREDENTIALS | base64 -d > /tmp/gcloud.json
-  gcloud auth activate-service-account --key-file /tmp/gcloud.json
-}
-
-function gcloud_sync() {
+function b2_sync() {
+  b2 sync --delete --replaceNewer "$1" "$2"
   gsutil -m rsync -d -r "$1" "$2"
 }
 
-gcloud_login
-gcloud_sync gs://archlinux-packages $REPO_LOC
+b2_sync b2://ahayworth-archlinux-packages $REPO_LOC
 fix_symlinks
 sudo sed -i -e 's/makechrootpkg_args=(\-c \-n \-C)/makechrootpkg_args=(-c)/g' /usr/sbin/archbuild
 
@@ -64,7 +59,7 @@ while read pkg ver; do
 done < <(listrepo)
 
 fix_symlinks
-gcloud_sync $REPO_LOC gs://archlinux-packages
+b2_sync $REPO_LOC b2://ahayworth-archlinux-packages
 
 echo "Done! Current packages:"
 listrepo

@@ -1,8 +1,8 @@
 name: Build packages
 on:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
   schedule:
     - cron: "30 */4 * * *"
 
@@ -13,6 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GCLOUD_CREDENTIALS: ${{ secrets.GCLOUD_CREDENTIALS }}
+      B2_APPLICATION_ID: ${{ secrets.B2_APPLICATION_ID }}
+      B2_APPLICATION_KEY: ${{ secrets.B2_APPLICATION_KEY }}
     steps:
       - uses: actions/checkout@v1
       - name: Build packages
@@ -24,7 +26,7 @@ jobs:
             --tmpfs /tmp \
             -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
             -v /etc/machine-id:/etc/machine-id:ro \
-            -e GCLOUD_CREDENTIALS \
+            -e B2_APPLICATION_ID -e B2_APPLICATION_KEY \
             -v $GITHUB_WORKSPACE:/home/builder/archlinux-packages \
             docker.pkg.github.com/ahayworth/archlinux-packages/archlinux-packages:latest \
             /home/builder/archlinux-packages/script/build-packages.sh
