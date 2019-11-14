@@ -6,9 +6,7 @@ REPO_LOC='/repo'
 function makechroot() {
   sudo mkarchroot \
     -C /usr/share/devtools/pacman-aur.conf \
-    /var/lib/archbuild/aur-x86_64/root
-  sudo arch-nspawn /var/lib/archbuild/aur-x86_64/root \
-    pacman -S --noconfirm git
+    /var/lib/archbuild/aur-x86_64/root base-devel git
 
   while read key; do
     sudo arch-nspawn /var/lib/archbuild/aur-x86_64/root \
