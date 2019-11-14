@@ -1,10 +1,10 @@
 name: Build packages
 on:
-  push:
-    branches:
-      - master
-  schedule:
-    - cron: "30 */6 * * *"
+  # push:
+  #   branches:
+  #     - master
+  # schedule:
+  #   - cron: "30 */6 * * *"
 
 env:
   IMAGE_NAME: archlinux-packages
